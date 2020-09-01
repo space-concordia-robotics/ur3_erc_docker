@@ -4,12 +4,22 @@
 $ ./build_erc.sh 
 ```
 ## Running container
-
+Create a docker container and run it:
 ```sh 
-$ docker run -it --name=ur_erc --env="DISPLAY" --env="QT_X11_NO_MITSHM=1"
---volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --volume="/dev:/dev" --privileged ur3_erc
+$ docker run -it --name=ur_erc --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --volume="/dev:/dev" --privileged ur3_erc
 ```
 
+or if a docker container was already created, check with:
+```sh
+$ docker ps -a
+```
+
+and start the container with:
+```sh
+$  docker start <container_ID>
+```
+
+In a seperate terminal window, which is not running a docker container.
 Enable X server host:
 ```sh
 $ xhost +local:root
@@ -19,8 +29,10 @@ or if you're concerned about security:
 ```sh
 $ xhost +local:`docker inspect --format='{{ .Config.Hostname }}' ur_erc`
 ```
+Note: Enable X server host anytime computer is restarted, otherwise Gazebo will not spawn!
 
-Then, you can run command in running container:
+
+In each terminal window, which will run the UR3 simulation setup commands, run the following:
 ```sh 
 $ docker exec -it ur_erc /bin/bash
 ```
@@ -30,7 +42,7 @@ Now you can run commands below in docker container.
 ## UR3 simulation with MoveIt! and gripper
 Simulation in Gazebo:
 ```sh 
-$ rosrun ur_gazebo ur3_erc_workcell.launch 
+$ roslaunch ur_gazebo ur3_erc_workcell.launch 
 ```
 MoveIt! Planner:
 ```sh 
@@ -48,7 +60,7 @@ Change in Displays bookmark *Global Options/Fixed Frame* to 'base_link'.
 
 Simulation in Gazebo:
 ```sh 
-$ rosrun ur_gazebo ur3_erc_workcell.launch
+$ roslaunch ur_gazebo ur3_erc_workcell.launch
 ```
 MoveIt! Planner:
 ```sh 
